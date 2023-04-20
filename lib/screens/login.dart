@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/screens/register.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 
 class LoginPage extends StatelessWidget {
@@ -15,7 +16,7 @@ class LoginPage extends StatelessWidget {
         children: <Widget>[
           Image.asset(
             'assets/instagram_logo.png',
-            height: 100,
+            height: 64,
           ),
           const SizedBox(height: 32),
           TextFieldInput(
@@ -54,9 +55,7 @@ class LoginPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextButton(
-            onPressed: () {
-              // Acción al presionar el botón de "¿Olvidaste tu contraseña?"
-            },
+            onPressed: () {},
             child: const Text(
               '¿Olvidaste tu contraseña?',
               style: TextStyle(
@@ -65,6 +64,34 @@ class LoginPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          const Expanded(child: SizedBox()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: const Text(
+                  'No tienes cuenta?',
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterPage(),
+                  ),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text(
+                    ' Registrate.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
