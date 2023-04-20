@@ -4,7 +4,16 @@ import 'package:instagram_clone/responsive/responsive_layout.dart';
 import 'package:instagram_clone/responsive/web_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase/firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
