@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/responsive/mobile_screen.dart';
+import 'package:instagram_clone/responsive/responsive_layout.dart';
+import 'package:instagram_clone/responsive/web_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
 void main() {
@@ -16,8 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: const Scaffold(
-        body: Text('Inicio proyecto Instagram clone'),
+      home: const ResponsiveLayout(
+        mobileScreenLayout: MobileScreen(),
+        webScreenLayout: WebScreen(),
       ),
     );
   }
