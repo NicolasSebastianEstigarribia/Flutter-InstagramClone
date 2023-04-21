@@ -3,18 +3,20 @@ import 'package:image_picker/image_picker.dart';
 
 
 pickImage(BuildContext context ,ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? file = await imagePicker.pickImage(source: source);
+  if (file != null) {
+    return await file.readAsBytes();
   }
-  showSnackBar(context, 'No selecciono ninguna imagen.');
+  showSnackBar('No selecciono ninguna imagen.');
 }
 
-dynamic showSnackBar(BuildContext context, String text) {
-  return ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(text),
-    ),
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
+dynamic showSnackBar(String text) {
+  final snackBar = SnackBar(
+    content: Text(text),
   );
+  scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
 }

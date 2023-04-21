@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       //   mobileScreenLayout: MobileScreen(),
       //   webScreenLayout: WebScreen(),
       // ),
-       home: LoginPage(),
+       home: const LoginPage(),
     );
   }
 }
