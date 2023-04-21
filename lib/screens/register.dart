@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/resources/auth_method.dart';
 import 'package:instagram_clone/screens/login.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
-  final bool _isLoading = false;
+  bool _isLoading = false;
   Uint8List? _image;
 
   @override
@@ -41,10 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
-                flex: 2,
-                child: Container(),
-              ),
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
                 color: primaryColor,
@@ -67,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     bottom: -10,
                     left: 80,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: selectImage,
                       icon: const Icon(Icons.add_a_photo),
                     ),
                   )
@@ -110,7 +109,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 24,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  bool validaciones = todoOK();
+
+                  if (validaciones) {
+                    signUpUser();
+                  }
+                },
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -123,19 +128,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   child: !_isLoading
                       ? const Text(
-                          'Sign up',
+                          'Registrarme',
                         )
                       : const CircularProgressIndicator(
                           color: primaryColor,
                         ),
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Flexible(
-                flex: 2,
-                child: Container(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -169,5 +167,50 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  selectImage() async {
+    Uint8List im = await pickImage(context, ImageSource.camera);
+    // establece el estado porque necesitamos mostrar la imagen que seleccionamos en el avatar del círculo
+    setState(() {
+      _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    // set loading to true
+    setState(() {
+      _isLoading = true;
+    });
+
+    // signup user using our authmethodds
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        username: _usernameController.text,
+        bio: _bioController.text,
+        file: _image!);
+    // if string returned is exitoso, user ha sido creado
+    if (res == "exitoso") {
+      setState(() {
+        _isLoading = false;
+      });
+      // Navegar a la pantalla de inicio
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      // Mostrar el error
+      showSnackBar(context, res);
+    }
+  }
+
+  bool todoOK() {
+    if (_image == null) {
+      showSnackBar(context, 'Debe ingresar una imagen de perfil.');
+      return false;
+    }
+
+    return true;
   }
 }
