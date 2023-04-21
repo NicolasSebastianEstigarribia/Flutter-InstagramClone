@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +20,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -114,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 InkWell(
                   onTap: () {
                     bool validaciones = todoOK();
-      
+
                     if (validaciones) {
                       signUpUser();
                     }
@@ -176,16 +181,12 @@ class _RegisterPageState extends State<RegisterPage> {
   selectImage() async {
     Uint8List im = await pickImage(context, ImageSource.camera);
     // establece el estado porque necesitamos mostrar la imagen que seleccionamos en el avatar del círculo
-    setState(() {
-      _image = im;
-    });
+    setState(() => _image = im);
   }
 
   void signUpUser() async {
     // set loading to true
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     // signup user using our authmethodds
     String res = await AuthMethods().signUpUser(
@@ -196,22 +197,17 @@ class _RegisterPageState extends State<RegisterPage> {
         file: _image!);
     // if string returned is exitoso, user ha sido creado
     if (res == "exitoso") {
-      setState(() {
-        _isLoading = false;
-      });
       // Navegar a la pantalla de inicio
     } else {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isLoading = false);
       // Mostrar el error
-      showSnackBar(res);
+      mostrarSnackBar(context, mensaje: res);
     }
   }
 
   bool todoOK() {
     if (_image == null) {
-      showSnackBar('Debe ingresar una imagen de perfil.');
+      mostrarSnackBar(context, mensaje: 'Debe ingresar una imagen de perfil.');
       return false;
     }
 

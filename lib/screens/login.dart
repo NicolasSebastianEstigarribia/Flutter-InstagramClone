@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/resources/auth_method.dart';
 import 'package:instagram_clone/screens/register.dart';
@@ -14,10 +16,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   void dispose() {
@@ -27,21 +30,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginUser() async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
+
     String res = await AuthMethods().loginUser(
         email: _emailController.text, password: _passwordController.text);
+
     if (res == 'exitoso') {
-      setState(() {
-        _isLoading = false;
-      });
       //Navegar
     } else {
-      setState(() {
-        _isLoading = false;
-      });
-      showSnackBar(res);
+      setState(() => _isLoading = false);
+      mostrarSnackBar(context, mensaje: res);
     }
   }
 
@@ -104,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const Expanded(child: SizedBox()),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

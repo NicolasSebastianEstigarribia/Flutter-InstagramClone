@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-pickImage(BuildContext context ,ImageSource source) async {
+pickImage(BuildContext context, ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
   XFile? file = await imagePicker.pickImage(source: source);
   if (file != null) {
     return await file.readAsBytes();
   }
-  showSnackBar('No selecciono ninguna imagen.');
 }
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
-
-dynamic showSnackBar(String text) {
-  final snackBar = SnackBar(
-    content: Text(text),
-  );
-  scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
+mostrarSnackBar(BuildContext context,
+    {required String mensaje, int duracion = 1000}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(mensaje),
+    duration: Duration(milliseconds: duracion),
+  ));
 }
