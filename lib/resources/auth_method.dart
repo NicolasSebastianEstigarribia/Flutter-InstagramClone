@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:instagram_clone/models/user.dart' as model;
-import 'package:instagram_clone/resources/storage_mothod.dart';
+import 'package:instagram_clone/resources/storage_method.dart';
 
 class AuthMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -55,7 +55,7 @@ class AuthMethods {
           .doc(cred.user!.uid)
           .set(user.toJson());
 
-      res = "exitoso";
+      res = "success";
     } catch (err) {
       return err.toString();
     }
@@ -75,7 +75,7 @@ class AuthMethods {
           email: email,
           password: password,
         );
-        res = "exitoso";
+        res = "success";
       } else {
         res = "Por favor ingrese todos los campos";
       }

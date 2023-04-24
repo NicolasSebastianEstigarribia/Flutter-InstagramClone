@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     String res = await AuthMethods().loginUser(
         email: _emailController.text, password: _passwordController.text);
 
-    if (res == 'exitoso') {
+    if (res == 'success') {
       //Navegar y romver la anterior para que no pueda volver
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(

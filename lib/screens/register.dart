@@ -192,8 +192,8 @@ class _RegisterPageState extends State<RegisterPage> {
         username: _usernameController.text,
         bio: _bioController.text,
         file: _image!);
-    // if string returned is exitoso, user ha sido creado
-    if (res == "exitoso") {
+    // if string returned is success, user ha sido creado
+    if (res == "success") {
       //Navegar y romver la anterior para que no pueda volver
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(

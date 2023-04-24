@@ -5,18 +5,19 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/providers/user.dart';
+import 'package:instagram_clone/resources/firestore_method.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:provider/provider.dart';
 
-class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+class AddPost extends StatefulWidget {
+  const AddPost({Key? key}) : super(key: key);
 
-  @override
-  _AddPostScreenState createState() => _AddPostScreenState();
+   @override
+  State<AddPost> createState() => _AddPostState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> {
+class _AddPostState extends State<AddPost> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
@@ -26,11 +27,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
       context: parentContext,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Create a Post'),
+          title: const Text('Crear una publicación'),
           children: <Widget>[
             SimpleDialogOption(
                 padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
+                child: const Text('Toma una foto'),
                 onPressed: () async {
                   Navigator.pop(context);
                   Uint8List file = await pickImage(ImageSource.camera);
@@ -40,7 +41,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 }),
             SimpleDialogOption(
                 padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
+                child: const Text('Elegir de la galería'),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   Uint8List file = await pickImage(ImageSource.gallery);
@@ -50,7 +51,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 }),
             SimpleDialogOption(
               padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
+              child: const Text("Cancelar"),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -81,7 +82,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
         mostrarSnackBar(
           context,
-          mensaje: 'Posteado!'
+          mensaje: 'Publicado!'
         );
         clearImage();
       } else {
@@ -135,7 +136,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 onPressed: clearImage,
               ),
               title: const Text(
-                'Post to',
+                'Publicar en',
               ),
               centerTitle: false,
               actions: <Widget>[
@@ -146,7 +147,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     userProvider.getUser.photoUrl,
                   ),
                   child: const Text(
-                    "Post",
+                    "Publicación",
                     style: TextStyle(
                         color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
@@ -176,7 +177,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: TextField(
                         controller: _descriptionController,
                         decoration: const InputDecoration(
-                            hintText: "Write a caption...",
+                            hintText: "Escribir un subtitulo...",
                             border: InputBorder.none),
                         maxLines: 8,
                       ),
