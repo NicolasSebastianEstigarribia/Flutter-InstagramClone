@@ -59,10 +59,6 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.asset(
-            'assets/instagram_logo.png',
-            height: 64,
-          ),
           const SizedBox(height: 32),
           TextFieldInput(
             hintText: 'Ingrese su email',
@@ -97,45 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                       color: primaryColor,
                     ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              '¿Olvidaste tu contraseña?',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: const Text(
-                  'No tienes cuenta?',
-                ),
-              ),
-              GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const RegisterScreen(),
-                  ),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text(
-                    ' Registrate.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),
