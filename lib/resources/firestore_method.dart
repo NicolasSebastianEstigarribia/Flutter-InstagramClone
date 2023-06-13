@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:instagram_clone/providers/post.dart';
+import 'package:instagram_clone/models/post.dart';
 import 'package:instagram_clone/resources/storage_method.dart';
 
 import 'package:uuid/uuid.dart';

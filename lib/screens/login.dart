@@ -5,7 +5,6 @@ import 'package:instagram_clone/resources/auth_method.dart';
 import 'package:instagram_clone/responsive/mobile_screen.dart';
 import 'package:instagram_clone/responsive/responsive_layout.dart';
 import 'package:instagram_clone/responsive/web_screen.dart';
-import 'package:instagram_clone/screens/register.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
@@ -56,45 +55,48 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(height: 32),
-          TextFieldInput(
-            hintText: 'Ingrese su email',
-            textInputType: TextInputType.emailAddress,
-            textEditingController: _emailController,
-          ),
-          const SizedBox(height: 16),
-          TextFieldInput(
-            hintText: 'Ingrese su contraseña',
-            textInputType: TextInputType.text,
-            textEditingController: _passwordController,
-            isPass: true,
-          ),
-          const SizedBox(height: 32),
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-              onPressed: loginUser,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-              child: !_isLoading
-                  ? const Text('Iniciar sesión',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ))
-                  : const CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 32),
+            TextFieldInput(
+              hintText: 'Ingrese su email',
+              textInputType: TextInputType.emailAddress,
+              textEditingController: _emailController,
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            TextFieldInput(
+              hintText: 'Ingrese su contraseña',
+              textInputType: TextInputType.text,
+              textEditingController: _passwordController,
+              isPass: true,
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: loginUser,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+                child: !_isLoading
+                    ? const Text('Iniciar sesión',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ))
+                    : const CircularProgressIndicator(
+                        color: primaryColor,
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
