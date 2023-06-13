@@ -176,7 +176,7 @@ class _RegisterPageState extends State<RegisterScreen> {
   }
 
   selectImage() async {
-    Uint8List im = await pickImage(ImageSource.camera);
+    Uint8List im = await pickImage(ImageSource.gallery);
     // establece el estado porque necesitamos mostrar la imagen que seleccionamos en el avatar del círculo
     setState(() => _image = im);
   }

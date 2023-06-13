@@ -9,6 +9,7 @@ import 'package:instagram_clone/screens/comments.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/globals.dart';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:instagram_clone/widgets/image_network.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
@@ -175,9 +176,9 @@ class _PostCardState extends State<PostCard> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
                   width: double.infinity,
-                  child: Image.network(
+                  child: ImageNetwork(
+                    imageUrl:
                     widget.snap['postUrl'].toString(),
-                    fit: BoxFit.cover,
                   ),
                 ),
                 AnimatedOpacity(

@@ -5,7 +5,6 @@ import 'package:instagram_clone/screens/profile.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/globals.dart';
 
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -50,27 +49,34 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
+
                 return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemCount: (snapshot.data!).docs.length,
                   itemBuilder: (context, index) {
+                    final DocumentSnapshot document =
+                        (snapshot.data!).docs[index];
+
+                    final Map<String, dynamic>? data =
+                        document.data() as Map<String, dynamic>?;
+
+                    final String uid = data?['uid'] ?? '';
+                    final String photoUrl = data?['photoUrl'] ?? '';
+                    final String username = data?['username'] ?? '';
+
                     return InkWell(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ProfileScreen(
-                            uid: (snapshot.data! as dynamic).docs[index]['uid'],
+                            uid: uid,
                           ),
                         ),
                       ),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            (snapshot.data! as dynamic).docs[index]['photoUrl'],
-                          ),
+                          backgroundImage: NetworkImage(photoUrl),
                           radius: 16,
                         ),
-                        title: Text(
-                          (snapshot.data! as dynamic).docs[index]['username'],
-                        ),
+                        title: Text(username),
                       ),
                     );
                   },
@@ -91,11 +97,21 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 return StaggeredGridView.countBuilder(
                   crossAxisCount: 3,
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => Image.network(
-                    (snapshot.data! as dynamic).docs[index]['postUrl'],
-                    fit: BoxFit.cover,
-                  ),
+                  itemCount: (snapshot.data!).docs.length,
+                  itemBuilder: (context, index) {
+                    final DocumentSnapshot document =
+                        (snapshot.data!).docs[index];
+
+                    final Map<String, dynamic>? data =
+                        document.data() as Map<String, dynamic>?;
+
+                    final String postUrl = data?['postUrl'] ?? '';
+
+                    return Image.network(
+                      postUrl,
+                      fit: BoxFit.cover,
+                    );
+                  },
                   staggeredTileBuilder: (index) => MediaQuery.of(context)
                               .size
                               .width >

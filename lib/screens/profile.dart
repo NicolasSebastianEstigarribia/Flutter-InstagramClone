@@ -1,22 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/resources/auth_method.dart';
+import 'package:instagram_clone/providers/user.dart';
 import 'package:instagram_clone/resources/firestore_method.dart';
 import 'package:instagram_clone/screens/login.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String uid;
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
+  final String? uid;
+  const ProfileScreen({Key? key, this.uid}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String uid = '';
   var userData = {};
   int postLen = 0;
   int followers = 0;
@@ -27,6 +29,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.uid == null) {
+      uid = FirebaseAuth.instance.currentUser!.uid;
+    } else {
+      uid = widget.uid!;
+    }
+
     getData();
   }
 
@@ -35,10 +44,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = true;
     });
     try {
-      var userSnap = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.uid)
-          .get();
+      var userSnap =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       // get post lENGTH
       var postSnap = await FirebaseFirestore.instance
@@ -113,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     FirebaseAuth.instance.currentUser!.uid ==
-                                            widget.uid
+                                            uid
                                         ? FollowButton(
                                             text: 'Sign Out',
                                             backgroundColor:
@@ -121,7 +128,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             textColor: primaryColor,
                                             borderColor: Colors.grey,
                                             function: () async {
-                                              await AuthMethods().signOut();
+                                              final userProvider =
+                                                  Provider.of<UserProvider>(
+                                                      context,
+                                                      listen: false);
+
+                                              userProvider.signOut();
+
                                               Navigator.of(context)
                                                   .pushReplacement(
                                                 MaterialPageRoute(
@@ -205,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('posts')
-                      .where('uid', isEqualTo: widget.uid)
+                      .where('uid', isEqualTo: uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

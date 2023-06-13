@@ -2,15 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/resources/auth_method.dart';
-import 'package:instagram_clone/responsive/mobile_screen.dart';
-import 'package:instagram_clone/responsive/responsive_layout.dart';
-import 'package:instagram_clone/responsive/web_screen.dart';
+import 'package:instagram_clone/providers/user.dart';
 import 'package:instagram_clone/screens/register.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/globals.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,36 +21,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _isLoading = false;
-
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-  }
-
-  void loginUser() async {
-    setState(() => _isLoading = true);
-
-    String res = await AuthMethods().loginUser(
-        email: _emailController.text, password: _passwordController.text);
-
-    if (res == 'success') {
-      //Navegar y romver la anterior para que no pueda volver
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreen(),
-            webScreenLayout: WebScreen(),
-          ),
-        ),
-        (route) => false,
-      );
-    } else {
-      setState(() => _isLoading = false);
-      mostrarSnackBar(context, mensaje: res);
-    }
   }
 
   @override
@@ -75,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
+                // ignore: deprecated_member_use
                 color: primaryColor,
                 height: 64,
               ),
@@ -116,55 +90,72 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget rowRegister(BuildContext context) {
     return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text(
-                    '¿No tienes una cuenta?',
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text(
-                      ' Registrarse.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: const Text(
+            '¿No tienes una cuenta?',
+          ),
+        ),
+        GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const RegisterScreen(),
+            ),
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: const Text(
+              ' Registrarse.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buttonLogin() {
-    return SizedBox(
-      height: 50,
-      child: ElevatedButton(
-        onPressed: loginUser,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ),
-        child: !_isLoading
-            ? const Text('Iniciar sesión',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ))
-            : const CircularProgressIndicator(
-                color: primaryColor,
+    return Consumer<UserProvider>(
+      builder: (context, authViewModel, child) {
+        return SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () async {
+              String message = await authViewModel.signIn(
+                _emailController.text,
+                _passwordController.text,
+                context,
+              );
+
+              if (message != 'success') {
+                mostrarSnackBar(context, mensaje: message);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(3),
               ),
-      ),
+            ),
+            child: (authViewModel.status == Status.Authenticating)
+                // usuario autenticado, muestra la pantalla principal
+                ? const CircularProgressIndicator(
+                    color: primaryColor,
+                  )
+                : const Text(
+                    'Iniciar sesión',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 }
