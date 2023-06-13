@@ -10,7 +10,7 @@ pickImage(ImageSource source) async {
 }
 
 mostrarSnackBar(BuildContext context,
-    {required String mensaje, int duracion = 1000}) {
+    {required String mensaje, int duracion = 2000}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(mensaje),
     duration: Duration(milliseconds: duracion),
